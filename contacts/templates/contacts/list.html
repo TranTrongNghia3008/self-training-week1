@@ -1,0 +1,25 @@
+<h1>Contact List</h1>
+<a href="{% url 'contact_create' %}">+ Add Contact</a>
+
+<form method="POST" action="{% url 'contact_batch_delete' %}">
+  {% csrf_token %}
+  <ul>
+    {% for contact in contacts %}
+    <li>
+      <input type="checkbox" name="contact_ids" value="{{ contact.id }}" />
+      {{ contact.name }} - {{ contact.phone }} - {{ contact.email }}
+      <a href="{% url 'contact_update' contact.pk %}">Edit</a>
+      <a href="{% url 'contact_delete' contact.pk %}">Delete</a>
+    </li>
+    {% endfor %}
+  </ul>
+  <button type="submit">Delete Selected</button>
+</form>
+
+{% if messages %}
+<ul class="messages">
+  {% for message in messages %}
+  <li>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
