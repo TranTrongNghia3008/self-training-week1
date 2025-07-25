@@ -1,25 +1,36 @@
-<h1>Contact List</h1>
+<h1>Contact List by Group</h1>
 <a href="{% url 'contact_create' %}">+ Add Contact</a>
 
 <form method="POST" action="{% url 'contact_batch_delete' %}">
   {% csrf_token %}
-  <ul>
-    {% for contact in contacts %}
-    <li>
-      <input type="checkbox" name="contact_ids" value="{{ contact.id }}" />
-      {{ contact.name }} - {{ contact.phone }} - {{ contact.email }}
-      <a href="{% url 'contact_update' contact.pk %}">Edit</a>
-      <a href="{% url 'contact_delete' contact.pk %}">Delete</a>
-    </li>
-    {% endfor %}
-  </ul>
+  
+  {% for group_name, contacts in grouped_contacts.items %}
+    <h2>{{ group_name }}</h2>
+    <ul>
+      {% for contact in contacts %}
+        <li>
+          <input type="checkbox" name="contact_ids" value="{{ contact.id }}" />
+          <strong>{{ contact.name }}</strong> - {{ contact.phone }} - {{ contact.email }}
+          <br><a href="{% url 'contact_update' contact.pk %}">Edit</a>
+          <a href="{% url 'contact_delete' contact.pk %}">Delete</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+
+  {% if ungrouped_contacts %}
+    <h2>Ungrouped Contacts</h2>
+    <ul>
+      {% for contact in ungrouped_contacts %}
+        <li>
+          <input type="checkbox" name="contact_ids" value="{{ contact.id }}" />
+          <strong>{{ contact.name }}</strong> - {{ contact.phone }} - {{ contact.email }}
+          <br><a href="{% url 'contact_update' contact.pk %}">Edit</a>
+          <a href="{% url 'contact_delete' contact.pk %}">Delete</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
   <button type="submit">Delete Selected</button>
 </form>
-
-{% if messages %}
-<ul class="messages">
-  {% for message in messages %}
-  <li>{{ message }}</li>
-  {% endfor %}
-</ul>
-{% endif %}

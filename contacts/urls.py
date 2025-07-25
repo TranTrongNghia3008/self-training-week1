@@ -7,4 +7,5 @@ urlpatterns = [
     path('<int:pk>/edit/', views.contact_update, name='contact_update'),
     path('<int:pk>/delete/', views.contact_delete, name='contact_delete'),
     path('batch-delete/', views.contact_batch_delete, name='contact_batch_delete'),
+    path("groups/create/", views.group_create, name="group_create"),
 ]

@@ -1,20 +1,28 @@
 <h1>{% if contact %}Edit{% else %}Create{% endif %} Contact</h1>
 <form method="POST">
   {% csrf_token %}
-  <label>Name:</label
-  ><input type="text" name="name" value="{{ contact.name|default:'' }}" /><br />
-  <label>Email:</label
-  ><input
-    type="email"
-    name="email"
-    value="{{ contact.email|default:'' }}"
-  /><br />
-  <label>Phone:</label
-  ><input
-    type="text"
-    name="phone"
-    value="{{ contact.phone|default:'' }}"
-  /><br />
+
+  <label>Name:</label>
+  <input type="text" name="name" value="{{ contact.name|default:'' }}" /><br />
+
+  <label>Email:</label>
+  <input type="email" name="email" value="{{ contact.email|default:'' }}" /><br />
+
+  <label>Phone:</label>
+  <input type="text" name="phone" value="{{ contact.phone|default:'' }}" /><br />
+
+  <label>Groups:</label>
+  <select name="groups" multiple>
+    {% for group in groups %}
+      <option value="{{ group.id }}"
+        {% if contact and group in contact.groups.all %}selected{% endif %}>
+        {{ group.name }}
+      </option>
+    {% endfor %}
+  </select>
+  <a href="{% url 'group_create' %}">+ Add Group</a><br />
+
   <button type="submit">Save</button>
 </form>
+
 <a href="{% url 'contact_list' %}">Back</a>
